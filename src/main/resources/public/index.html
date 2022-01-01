@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Phân tích số n ra thành thừa số nguyên tố</h1>
+    <hr />
+    <form action="">
+      <label for="n">Nhập n :</label>
+      <input id="n" type="number" />
+      <button id="submit-btn">Phân tích</button>
+    </form>
+    <h4 id="result"></h4>
+  </body>
+
+  <script>
+    const submitBtn = document.querySelector('#submit-btn');
+    const nInput = document.querySelector('#n');
+    const result = document.querySelector('#result');
+    submitBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const value = Number(nInput.value);
+      const response = await fetch('/calc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ n: value }),
+      });
+      if (response.status === 200) {
+        const data = await response.json();
+        let temp = [];
+        Object.keys(data).forEach((nums) => {
+          temp.push(nums + '^' + data[nums]);
+        });
+        result.textContent = value + ' = ' + temp.join(' x ');
+      }
+    });
+  </script>
+</html>
